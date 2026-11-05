@@ -1,0 +1,9 @@
+{
+  "script": "11_intermediate",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.05,
+  "stdout": "=== Intermediate: File Handling ===\nWrote test_output.txt\nScript complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:46:33.640586"
+}

@@ -1,0 +1,9 @@
+{
+  "script": "01_elementary",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.11,
+  "stdout": "Script 01: Hello from elementary level\nThis is the first script in the pipeline.\nLearning basic output.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:44:32.905811"
+}

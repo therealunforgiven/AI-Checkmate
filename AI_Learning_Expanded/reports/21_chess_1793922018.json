@@ -1,0 +1,9 @@
+{
+  "script": "21_chess",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.05,
+  "stdout": "=== Chess Basics: Board Setup ===\nFiles: a-h, Ranks: 1-8\nWhite starts on ranks 1-2, Black on 7-8\nKings: e1 (white), e8 (black)\nScript complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:40:18.350855"
+}

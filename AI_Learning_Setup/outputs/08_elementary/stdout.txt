@@ -1,0 +1,3 @@
+Script 08: Error handling
+Result: 5.0
+Try/except example complete.

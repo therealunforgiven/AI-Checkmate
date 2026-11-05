@@ -1,0 +1,4 @@
+Script 09: String operations
+AI LEARNING PIPELINE
+AI Learning Runner
+String work done.

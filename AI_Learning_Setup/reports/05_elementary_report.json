@@ -1,0 +1,10 @@
+{
+  "script": "05_elementary",
+  "status": "success",
+  "returncode": 0,
+  "runtime_seconds": 0.063751,
+  "start": "2026-11-05T16:34:35.954915",
+  "end": "2026-11-05T16:34:36.018666",
+  "stdout_preview": "Script 05: Functions\nHello, Pipeline!\nFunction example complete.\n",
+  "stderr_preview": ""
+}

@@ -1,0 +1,10 @@
+{
+  "script": "01_elementary",
+  "status": "success",
+  "returncode": 0,
+  "runtime_seconds": 0.047184,
+  "start": "2026-11-05T16:34:35.717238",
+  "end": "2026-11-05T16:34:35.764422",
+  "stdout_preview": "Script 01: Hello from elementary level\nThis is the first script in the pipeline.\nLearning basic output.\n",
+  "stderr_preview": ""
+}

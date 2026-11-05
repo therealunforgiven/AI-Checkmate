@@ -1,0 +1,4 @@
+Script 07: Dictionary basics
+Data: {'status': 'running', 'step': 7, 'level': 'elementary'}
+Status is: running
+Dictionary example done.

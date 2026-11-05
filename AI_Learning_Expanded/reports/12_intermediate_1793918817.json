@@ -1,0 +1,9 @@
+{
+  "script": "12_intermediate",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.07,
+  "stdout": "=== Intermediate: List Comprehensions ===\nSquares 1-10: [1, 4, 9, 16, 25, 36, 49, 64, 81, 100]\nEvens under 20: [0, 2, 4, 6, 8, 10, 12, 14, 16, 18]\nScript complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T16:46:57.923867"
+}
