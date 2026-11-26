@@ -154,6 +154,40 @@ def make_desktop_pdf(topic: str):
     render_pdf(raw_html, out_pdf)
     return out_pdf
 
+
+def build_side_by_side_pdf(topic: str):
+    print(f"[Side-by-Side PDF] Pulling local notes + live web data for: {topic} ...")
+    local_kb = load_knowledge(topic, max_chars=2400) or "No matching local notes found in knowledge/ yet."
+
+    web_snippets = list()
+    try:
+        results = list(DDGS().text(topic, max_results=3))
+        for idx, res in enumerate(results, 1):
+            url, title, body = res.get("href", ""), res.get("title", ""), res.get("body", "")
+            txt = body
+            try:
+                s = scrape_text(url)
+                if len(s) > 250:
+                    txt = s[:2000]
+            except Exception:
+                pass
+            web_snippets.append(f"({idx}) {title} [{url}]: {txt}")
+    except Exception as e:
+        web_snippets.append(f"Web search notice: {e}")
+
+    web_kb = "\n---\n".join(web_snippets) or "No web results returned."
+
+    system = (
+        "Output ONLY valid semantic HTML with zero markdown fences. Create a clean 1-to-2 page technical comparison report "
+        "with an <h1> title, a <div class='summary-box'> at the top summarizing agreements and differences, and a 2-column "
+        "<table> with <th style='width:50%'>Local Knowledge Base (Bench Files)</th> and "
+        "<th style='width:50%'>Live Web Findings</th> comparing the exact facts, pinouts, or procedures side by side."
+    )
+    prompt = f"Topic: {topic}\n\n=== SOURCE A: LOCAL KNOWLEDGE BASE ===\n{local_kb}\n\n=== SOURCE B: LIVE WEB SEARCH ===\n{web_kb[:2600]}"
+    raw_html = ask_ollama(prompt, system=system).removeprefix("```html").removeprefix("```").removesuffix("```").strip()
+    slug = re.sub(r"[^a-zA-Z0-9]+", "_", topic)[:35].strip("_") or "Comparison"
+    render_pdf(raw_html, f"Compare_Local_vs_Web_{slug}.pdf")
+
 def make_pdf_interactive(topic: str):
     kb = get_or_fetch_context(topic)
     prompt = f"Verified Reference Data:\n{kb}\n\nCreate a detailed, print-ready document for:\n{topic}" if kb else topic

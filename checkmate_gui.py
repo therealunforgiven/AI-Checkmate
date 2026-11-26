@@ -196,6 +196,7 @@ class CheckmateGUI:
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
         tk.Button(r, text="Pull NHTSA TSBs", bg="#0284c7", fg="white", command=lambda: self.run_bg(lambda: (checkmate.fetch_nhtsa_tsbs(self.doc_entry.get()), self.log("[TSB PDF Ready]\n")))).pack(side="left", padx=4)
         tk.Button(r, text="Build Contract PDF", bg="#16a34a", fg="white", command=lambda: self.run_bg(lambda: (checkmate.build_contract(self.doc_entry.get()), self.log("[Contract PDF Ready]\n")))).pack(side="left", padx=4)
+        tk.Button(r, text="Create PDF (Local vs Web)", bg="#d97706", fg="white", font=("Liberation Sans", 11, "bold"), command=lambda: self.run_bg(lambda: (checkmate.build_side_by_side_pdf(self.doc_entry.get()), self.log("[Side-by-Side Comparison PDF Ready]\n")))).pack(side="left", padx=4)
         tk.Button(r, text="Draw SVG Diagram", bg="#7c3aed", fg="white", command=lambda: self.run_bg(lambda: (checkmate.draw_diagram_pdf(self.doc_entry.get()), self.log("[Diagram PDF Ready]\n")))).pack(side="left", padx=4)
 
     def build_tab_money(self):
