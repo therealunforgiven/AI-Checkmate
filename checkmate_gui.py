@@ -91,7 +91,7 @@ class CheckmateGUI:
         sp = os.path.join(BASE_DIR, "scripts", script_name)
         self.log(f"\n>>> {script_name} {' '.join(args_tuple)}\n")
         try:
-            proc = subprocess.run((PY_EXEC, sp) + args_tuple, cwd=BASE_DIR, input=stdin_txt, capture_output=True, text=True, timeout=300)
+            proc = subprocess.run((PY_EXEC, '-u', sp) + args_tuple, cwd=BASE_DIR, input=stdin_txt, capture_output=True, text=True, timeout=300)
             if proc.stdout: self.log(proc.stdout + "\n")
             if proc.stderr: self.log("[ERR] " + proc.stderr + "\n")
         except Exception as e:
