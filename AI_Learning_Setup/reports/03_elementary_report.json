@@ -1,0 +1,10 @@
+{
+  "script": "03_elementary",
+  "status": "success",
+  "returncode": 0,
+  "runtime_seconds": 0.060102,
+  "start": "2026-11-05T16:34:35.833009",
+  "end": "2026-11-05T16:34:35.893111",
+  "stdout_preview": "Script 03: Lists and loops\nNumber: 1\nNumber: 2\nNumber: 3\nNumber: 4\nNumber: 5\nLoop complete.\n",
+  "stderr_preview": ""
+}

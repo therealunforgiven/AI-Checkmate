@@ -1,0 +1,9 @@
+{
+  "script": "07_elementary",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.05,
+  "stdout": "Script 07: Dictionary basics\nData: {'status': 'running', 'step': 7, 'level': 'elementary'}\nStatus is: running\nDictionary example done.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:11:12.969379"
+}

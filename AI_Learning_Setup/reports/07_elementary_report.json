@@ -1,0 +1,10 @@
+{
+  "script": "07_elementary",
+  "status": "success",
+  "returncode": 0,
+  "runtime_seconds": 0.048535,
+  "start": "2026-11-05T16:34:36.086299",
+  "end": "2026-11-05T16:34:36.134834",
+  "stdout_preview": "Script 07: Dictionary basics\nData: {'status': 'running', 'step': 7, 'level': 'elementary'}\nStatus is: running\nDictionary example done.\n",
+  "stderr_preview": ""
+}

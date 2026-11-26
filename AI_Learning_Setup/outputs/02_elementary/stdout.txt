@@ -1,0 +1,3 @@
+Script 02: Variables and math
+x + y = 30
+Done with basic arithmetic.

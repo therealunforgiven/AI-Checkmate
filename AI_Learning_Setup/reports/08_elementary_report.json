@@ -1,0 +1,10 @@
+{
+  "script": "08_elementary",
+  "status": "success",
+  "returncode": 0,
+  "runtime_seconds": 0.05998,
+  "start": "2026-11-05T16:34:36.138446",
+  "end": "2026-11-05T16:34:36.198426",
+  "stdout_preview": "Script 08: Error handling\nResult: 5.0\nTry/except example complete.\n",
+  "stderr_preview": ""
+}

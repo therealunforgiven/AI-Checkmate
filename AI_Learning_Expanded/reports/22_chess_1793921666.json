@@ -1,0 +1,9 @@
+{
+  "script": "22_chess",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.04,
+  "stdout": "=== Chess: Piece Values ===\nPawn: 1\nKnight: 3\nBishop: 3\nRook: 5\nQueen: 9\nKing: infinite\nMaterial advantage often decides games.\nScript complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:34:26.995659"
+}

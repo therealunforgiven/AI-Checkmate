@@ -1,0 +1,5 @@
+print("=== Chess Basics: Board Setup ===")
+print("Files: a-h, Ranks: 1-8")
+print("White starts on ranks 1-2, Black on 7-8")
+print("Kings: e1 (white), e8 (black)")
+print("Script complete.")

@@ -1,0 +1,9 @@
+{
+  "script": "08_elementary",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.04,
+  "stdout": "Script 08: Error handling\nResult: 5.0\nTry/except example complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:32:24.018993"
+}

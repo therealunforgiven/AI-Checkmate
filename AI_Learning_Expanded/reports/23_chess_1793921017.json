@@ -1,0 +1,9 @@
+{
+  "script": "23_chess",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.07,
+  "stdout": "=== Chess: Simple Move Generation Idea ===\nA knight moves in an L: 2 squares one way, 1 square perpendicular.\nFrom e4, possible knight moves: c3, c5, d2, d6, f2, f6, g3, g5\n(Ignoring board edges and captures for this example)\nScript complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:23:37.250350"
+}

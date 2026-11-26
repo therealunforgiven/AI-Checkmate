@@ -1,0 +1,9 @@
+{
+  "script": "02_elementary",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.07,
+  "stdout": "Script 02: Variables and math\nx + y = 30\nDone with basic arithmetic.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:12:56.043821"
+}

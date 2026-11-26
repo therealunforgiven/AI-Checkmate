@@ -1,0 +1,4 @@
+Script 10: Final elementary script
+This is the last script in the 1-10 set.
+Pipeline is working if you see this.
+Ready for higher levels.

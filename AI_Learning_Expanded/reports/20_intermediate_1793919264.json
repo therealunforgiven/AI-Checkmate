@@ -1,0 +1,9 @@
+{
+  "script": "20_intermediate",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.08,
+  "stdout": "Script 20 - intermediate level running\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T16:54:24.368442"
+}

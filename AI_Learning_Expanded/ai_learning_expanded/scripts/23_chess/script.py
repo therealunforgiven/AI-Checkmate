@@ -1,0 +1,5 @@
+print("=== Chess: Simple Move Generation Idea ===")
+print("A knight moves in an L: 2 squares one way, 1 square perpendicular.")
+print("From e4, possible knight moves: c3, c5, d2, d6, f2, f6, g3, g5")
+print("(Ignoring board edges and captures for this example)")
+print("Script complete.")

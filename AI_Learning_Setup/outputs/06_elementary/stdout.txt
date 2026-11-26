@@ -1,0 +1,3 @@
+Script 06: File writing
+Wrote output_note.txt in the script folder.
+File operation complete.

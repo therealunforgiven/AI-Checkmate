@@ -1,0 +1,10 @@
+{
+  "script": "04_elementary",
+  "status": "success",
+  "returncode": 0,
+  "runtime_seconds": 0.056241,
+  "start": "2026-11-05T16:34:35.895919",
+  "end": "2026-11-05T16:34:35.952160",
+  "stdout_preview": "Script 04: Conditionals\nValue is greater than 40\nConditional check done.\n",
+  "stderr_preview": ""
+}

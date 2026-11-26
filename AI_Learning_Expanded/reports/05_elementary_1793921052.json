@@ -1,0 +1,9 @@
+{
+  "script": "05_elementary",
+  "status": "success",
+  "return_code": 0,
+  "elapsed_sec": 0.06,
+  "stdout": "Script 05: Functions\nHello, Pipeline!\nFunction example complete.\n",
+  "stderr": "",
+  "timestamp": "2026-11-05T17:24:12.592452"
+}
