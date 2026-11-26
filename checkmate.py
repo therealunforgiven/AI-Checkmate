@@ -72,16 +72,25 @@ def ask_ollama(prompt: str, system: str = "You are Checkmate, a technical AI ass
     )
     return resp.json().get("response", "").strip()
 
-def load_knowledge(max_chars: int = 12000) -> str:
+def load_knowledge(query: str = "", max_chars: int = 14000) -> str:
+    if isinstance(query, int):
+        max_chars = query
+        query = ""
     files = sorted(glob.glob(os.path.join(KNOWLEDGE_DIR, "*.txt")) + glob.glob(os.path.join(KNOWLEDGE_DIR, "*.md")))
-    chunks = []
-    total = 0
+    keywords = tuple(w.lower() for w in re.findall(r"[a-zA-Z0-9_]+", str(query)) if len(w) >= 2)
+    scored = list()
     for path in files:
         with open(path, "r", encoding="utf-8") as f:
-            text = f.read()
-        entry = f"=== KNOWLEDGE FILE: {os.path.basename(path)} ===\n{text}\n"
-        if total + len(entry) > max_chars:
-            break
+            txt = f.read()
+        low_all = (os.path.basename(path) + " " + txt).lower()
+        score = sum(low_all.count(k) * 5 for k in keywords)
+        scored.append((score, os.path.basename(path), txt))
+    scored.sort(key=lambda item: next(iter(item)), reverse=True)
+    chunks, total = list(), 0
+    for score, fname, txt in scored:
+        entry = f"=== KNOWLEDGE: {fname} ===\n{txt}\n"
+        if total + len(entry) > int(max_chars):
+            continue
         chunks.append(entry)
         total += len(entry)
     return "\n".join(chunks)
