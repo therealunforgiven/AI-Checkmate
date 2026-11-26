@@ -179,6 +179,71 @@ def render_pdf(body_html: str, out_filename: str):
     print(f"[PDF Ready] -> {out_path}")
     return out_path
 
+
+def fill_template_pdf(template_pdf_path: str, updates_text: str):
+    """
+    Overlays today's live date and user-entered values onto an uploaded PDF template
+    using pypdf + reportlab so the original PDF's fonts, logos, and layout stay 100% unchanged.
+    """
+    import io
+    from pypdf import PdfReader, PdfWriter
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.pagesizes import letter
+
+    template_pdf_path = os.path.expanduser(template_pdf_path.strip().strip("'\""))
+    if not os.path.exists(template_pdf_path):
+        raise FileNotFoundError(f"Template PDF not found: {template_pdf_path}")
+
+    reader = PdfReader(template_pdf_path)
+    writer = PdfWriter()
+    today_str = datetime.date.today().strftime("%B %d, %Y")
+
+    # Build a transparent overlay matching page 1 dimensions
+    first_page = next(iter(reader.pages))
+    w = float(first_page.mediabox.width)
+    h = float(first_page.mediabox.height)
+
+    packet = io.BytesIO()
+    c = canvas.Canvas(packet, pagesize=(w, h))
+    c.setFont("Helvetica", 10)
+    # Stamp live date near top-right margin (easy to select & move in Adobe Acrobat)
+    c.drawRightString(w - 42, h - 38, f"Date: {today_str}")
+
+    # Stamp clean wrapped lines in the lower/main notes area without altering original fonts
+    y_pos = h - 110
+    for line in updates_text.splitlines():
+        clean = line.strip()
+        if not clean:
+            continue
+        while len(clean) > 95:
+            c.drawString(48, y_pos, clean[:95])
+            clean = clean[95:]
+            y_pos -= 14
+        c.drawString(48, y_pos, clean)
+        y_pos -= 15
+        if y_pos < 50:
+            break
+    c.save()
+    packet.seek(0)
+
+    overlay_reader = PdfReader(packet)
+    overlay_page = next(iter(overlay_reader.pages))
+
+    for idx, page in enumerate(reader.pages):
+        if idx == 0:
+            page.merge_page(overlay_page)
+        writer.add_page(page)
+
+    os.makedirs(PDF_DIR, exist_ok=True)
+    base = os.path.splitext(os.path.basename(template_pdf_path)).pop(0)
+    stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M")
+    out_path = os.path.join(PDF_DIR, f"{base}_Updated_{stamp}.pdf")
+    with open(out_path, "wb") as f_out:
+        writer.write(f_out)
+
+    print(f"[Template Preserved & Saved] -> {out_path}")
+    return out_path
+
 def build_side_by_side_pdf(topic: str):
     print(f"[Side-by-Side PDF] Pulling local notes + live web data for: {topic} ...")
     local_kb = load_knowledge(topic, max_chars=2400) or "No matching local notes found in knowledge/ yet."

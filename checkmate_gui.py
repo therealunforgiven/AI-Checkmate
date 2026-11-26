@@ -196,8 +196,23 @@ class CheckmateGUI:
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
         tk.Button(r, text="Pull NHTSA TSBs", bg="#0284c7", fg="white", command=lambda: self.run_bg(lambda: (checkmate.fetch_nhtsa_tsbs(self.doc_entry.get()), self.log("[TSB PDF Ready]\n")))).pack(side="left", padx=4)
         tk.Button(r, text="Build Contract PDF", bg="#16a34a", fg="white", command=lambda: self.run_bg(lambda: (checkmate.build_contract(self.doc_entry.get()), self.log("[Contract PDF Ready]\n")))).pack(side="left", padx=4)
+        tk.Button(r, text="Upload Template PDF (Keep Fonts)", bg="#0f766e", fg="white", font=("Liberation Sans", 11, "bold"), command=self.action_template_pdf).pack(side="left", padx=4)
         tk.Button(r, text="Create PDF (Local vs Web)", bg="#d97706", fg="white", font=("Liberation Sans", 11, "bold"), command=self.action_compare_pdf).pack(side="left", padx=4)
         tk.Button(r, text="Draw SVG Diagram", bg="#7c3aed", fg="white", command=lambda: self.run_bg(lambda: (checkmate.draw_diagram_pdf(self.doc_entry.get()), self.log("[Diagram PDF Ready]\n")))).pack(side="left", padx=4)
+
+    def action_template_pdf(self):
+        tpl_path = filedialog.askopenfilename(title="Select Your Existing Template PDF", filetypes=(("PDF Files", "*.pdf"),))
+        if not tpl_path:
+            return
+        notes = self.doc_entry.get().strip()
+        self.log(f"\n[Preserving Exact Fonts & Layout] Template: {os.path.basename(tpl_path)} ...\n")
+        def w():
+            try:
+                out = checkmate.fill_template_pdf(tpl_path, notes)
+                self.log(f"[Done!] Saved copy with original fonts intact + today's date -> {out}\n")
+            except Exception as e:
+                self.log(f"[Template PDF Error] {e}\n")
+        self.run_bg(w)
 
     def action_compare_pdf(self):
         val = self.doc_entry.get().strip()
