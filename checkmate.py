@@ -143,6 +143,24 @@ def search_and_learn(topic: str, max_results: int = 3):
         f.write(f"Search Topic: {topic}\n\n{summary}\n")
     print(f"[Learned!] Saved to: {out_path}\n")
 
+
+DESKTOP_DIR = os.path.expanduser("~/Desktop")
+os.makedirs(DESKTOP_DIR, exist_ok=True)
+
+def make_desktop_pdf(topic: str):
+    kb = load_knowledge(topic)
+    prompt = f"{kb}\n\nCreate a comprehensive, print-ready technical report for:\n{topic}" if kb else topic
+    system = (
+        "Output ONLY valid semantic HTML (<h1>, <h2>, <p>, <ul>, <li>, <table>, "
+        "<thead>, <tbody>, <tr>, <th>, <td>, <div class='summary-box'>) with zero markdown fences."
+    )
+    print(f"[Desktop PDF] Building full report for: {topic} ...")
+    raw_html = ask_ollama(prompt, system=system).removeprefix("```html").removeprefix("```").removesuffix("```").strip()
+    slug = re.sub(r"[^a-zA-Z0-9]+", "_", topic)[:40].strip("_") or "Report"
+    out_pdf = os.path.join(DESKTOP_DIR, f"Checkmate_{slug}.pdf")
+    render_pdf(raw_html, out_pdf)
+    return out_pdf
+
 def make_pdf_interactive(topic: str):
     kb = load_knowledge()
     prompt = f"{kb}\n\nCreate a detailed, print-ready document for:\n{topic}" if kb else topic

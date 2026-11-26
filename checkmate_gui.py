@@ -113,6 +113,7 @@ class CheckmateGUI:
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
         tk.Button(r, text="Ask AI", bg="#2563eb", fg="white", padx=12, command=self.action_chat).pack(side="left", padx=4)
         tk.Button(r, text="Search & Learn Topic", bg="#0d9488", fg="white", padx=12, command=self.action_search).pack(side="left", padx=4)
+                tk.Button(r, text="Save Full Report to Desktop (PDF)", bg="#d97706", fg="white", font=("Liberation Sans", 11, "bold"), padx=12, command=self.action_desktop_pdf).pack(side="left", padx=4)
         tk.Button(r, text="Scrape URL", bg="#6366f1", fg="white", padx=12, command=self.action_url).pack(side="left", padx=4)
 
     def action_chat(self):
@@ -126,6 +127,16 @@ class CheckmateGUI:
             kb = checkmate.load_knowledge(q)
             ans = checkmate.ask_ollama(f"Reference:\n{kb}\n\nUser Query (if a single module/term is typed, give full pinouts, chip mask & diagnostic steps):\n{q}" if kb else q)
             self.log(f"Checkmate > {ans}\n")
+            if "cas3" in q.lower():
+                self.log("\n[Quick Follow-Up Options] Do you need help with:\n  1) Terminal 15 (KL15_WUP Pin 19) wake-up testing\n  2) 0L15Y / 0M23S 4-wire BDM pinout\n  -> Type 'term 15' above, or click 'Save Full Report to Desktop (PDF)'!\n")
+        self.run_bg(w)
+
+    def action_desktop_pdf(self):
+        t = self.chat_entry.get().strip() or "BMW CAS3 Master Bench & Terminal 15 Guide"
+        self.log(f"\n[Building Desktop PDF] {t} ...\n")
+        def w():
+            out = checkmate.make_desktop_pdf(t)
+            self.log(f"[Saved to Desktop!] -> {out}\n")
         self.run_bg(w)
 
     def action_search(self):

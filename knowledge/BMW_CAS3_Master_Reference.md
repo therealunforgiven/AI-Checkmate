@@ -1,0 +1,12 @@
+# BMW CAS3 / CAS3+ Master Bench & Connector Reference (E70 X5, E90, E60)
+- **MCU / Chip Masks:** Motorola/Freescale `MC9S12XDP512` (`0L15Y`) or `MC9S12XEP100` (`0M23S`).
+- **4-Wire BDM Pads (UPA-USB / Orange 5):** `GND` (Pin 5), `BKGD` (Pin 6), `RESET` (Pin 7), `VDD +5V` (Pin 9). Always save 2 backups of `EEPROM` (4KB) and `FLASH` (512KB) before writing ISN or mileage.
+- **Main Connector `X13376` (41-Pin) Key Power & Wake-Up Pins:**
+  - **Pin 1 / Pin 34:** `KL30` Constant Battery 12V (Red/Green, Fuse F01/F36)
+  - **Pin 2 / Pin 20:** `KL31` Ground (Brown)
+  - **Pin 19:** `KL15_WUP` Ignition Wake-Up Output to DME, EGS Transmission, & JBE (Green/White — must jump to **~12V** when Start/Stop button is pressed; if 0V, DME and EGS stay asleep and car will not crank!)
+  - **Pin 22:** `KL50` Starter Solenoid Trigger Output (Black — sends 12V to starter relay when brake pedal + key auth + P/N switch agree)
+  - **Pin 26 / Pin 27:** `K-CAN High` (Orange/Green) & `K-CAN Low` (Green)
+- **DME-CAS Alignment & 128-Bit ISN:**
+  - `MSV80` / `MSD80` DMEs use a **32-character (16-byte) encrypted ISN** stored in CAS3+ EEPROM (`0x0000–0x001F` area, crypto-protected on CAS3+ ISTA-P v43+ builds).
+  - Never overwrite CAS3+ EEPROM without backing up; if key is in ignition during CAS3+ crypto read, remove key or supply valid working key dump.
