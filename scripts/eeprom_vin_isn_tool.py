@@ -344,8 +344,87 @@ def lookup_bench_pinout(query: str = "ALL"):
     if not found:
         print(f"  No exact preset match for '{query}'. Try: pinout BMW, pinout GM, pinout T43, pinout FORD, or pinout ALL\n")
 
+
+BACKUP_ROOT = os.path.expanduser("~/AI-Checkmate/backups")
+os.makedirs(BACKUP_ROOT, exist_ok=True)
+
+def auto_backup_flash(bin_path: str):
+    """
+    Automatically backs up any EEPROM/Flash read before flashing:
+    - Detects full 17-char VIN (normal or 16-bit byte-swapped) to extract Last 6 of VIN
+    - Saves verified original backup + SHA-256 hash inside ~/AI-Checkmate/backups/VIN_<LAST6>/
+    - Prompts if you want to log Shop Name and Vehicle Symptoms into a job_notes.txt file
+    """
+    bin_path = os.path.expanduser(bin_path.strip().strip("'\""))
+    if not os.path.exists(bin_path):
+        print(f"[Error] File not found: {bin_path}")
+        return
+
+    with open(bin_path, "rb") as f:
+        data = f.read()
+
+    sha256 = hashlib.sha256(data).hexdigest()
+
+    # Detect VIN in normal 8-bit or 16-bit byte-swapped order
+    m = VIN_REGEX.search(data)
+    if not m:
+        m = VIN_REGEX.search(swap_16bit_bytes(data))
+
+    if m:
+        full_vin = m.group(0).decode("ascii", errors="ignore")
+        last6 = full_vin[-6:]
+    else:
+        full_vin = "UNKNOWN_VIN"
+        manual_last6 = input("VIN not found in plain ASCII. Enter Last 6 of VIN (or press Enter for 'NO_VIN'): ").strip().upper()
+        last6 = manual_last6[-6:] if manual_last6 else "NO_VIN"
+
+    stamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    job_dir = os.path.join(BACKUP_ROOT, f"VIN_{last6}")
+    os.makedirs(job_dir, exist_ok=True)
+
+    orig_name = os.path.basename(bin_path)
+    backup_file = os.path.join(job_dir, f"{last6}_{stamp}_ORIG_{orig_name}")
+    with open(backup_file, "wb") as f:
+        f.write(data)
+
+    # Verify byte-for-byte write integrity
+    with open(backup_file, "rb") as f:
+        verify_hash = hashlib.sha256(f.read()).hexdigest()
+
+    if verify_hash != sha256:
+        print("[CRITICAL ERROR] Backup hash mismatch! Do NOT flash this chip yet.")
+        return
+
+    print(f"\n=== VERIFIED PRE-FLASH BACKUP COMPLETE ===")
+    print(f"  Full VIN:      {full_vin}")
+    print(f"  Last 6 Folder: {job_dir}")
+    print(f"  Backup File:   {os.path.basename(backup_file)}")
+    print(f"  Size & SHA256: {len(data)} bytes | {sha256[:16]}... [VERIFIED]")
+
+    add_notes = input("\nDo you want to add Shop Name or Vehicle Symptoms to this backup? (y/n): ").strip().lower()
+    shop_name = "N/A"
+    symptoms = "N/A"
+    if add_notes in ("y", "yes"):
+        shop_name = input("  Enter Shop / Customer Name (or press Enter to skip): ").strip() or "N/A"
+        symptoms = input("  Enter Vehicle Year/Make/Model & Symptoms (or press Enter to skip): ").strip() or "N/A"
+
+    notes_path = os.path.join(job_dir, f"{last6}_{stamp}_JOB_NOTES.txt")
+    with open(notes_path, "w", encoding="utf-8") as f:
+        f.write(f"=== CAR AND COMPUTER ELECTRIC — BENCH BACKUP LOG ===\n")
+        f.write(f"Date/Time:    {datetime.datetime.now().strftime('%Y-%m-%d %I:%M %p')}\n")
+        f.write(f"Full VIN:     {full_vin}\n")
+        f.write(f"Last 6 VIN:   {last6}\n")
+        f.write(f"Shop/Client:  {shop_name}\n")
+        f.write(f"Symptoms:     {symptoms}\n")
+        f.write(f"Backup File:  {os.path.basename(backup_file)}\n")
+        f.write(f"File Size:    {len(data)} bytes (0x{len(data):X})\n")
+        f.write(f"SHA-256 Hash: {sha256}\n")
+
+    print(f"[Job Log Saved] -> {notes_path}\n")
+
 def print_help():
     print("\n=== CHECKMATE EEPROM / ISN / VIN, FRM3 & GM DPS TOOLKIT ===")
+    print("  backup <path/to/dump.bin>               -> Auto-backup by Last 6 of VIN + log Shop/Symptoms")
     print("  scan <path/to/dump.bin>                 -> Extract 8-bit & 16-bit byte-swapped VINs + hashes")
     print("  frm3 <path/to/dflash_32kb.bin>          -> Recover 4KB EEE EEPROM from corrupted BMW FRM3 D-Flash")
     print("  upa_vin <chip> <hex_offset> <17_VIN>    -> Build UPA-USB .xscr script to write a VIN")
