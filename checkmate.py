@@ -160,6 +160,36 @@ def make_pdf_interactive(topic: str):
     HTML(string=styled_html).write_pdf(out_pdf)
     print(f"[PDF Ready] {out_pdf}\n")
 
+
+SCRIPTS_DIR = os.path.join(BASE_DIR, "scripts")
+os.makedirs(SCRIPTS_DIR, exist_ok=True)
+
+def list_custom_scripts():
+    py_files = sorted(f for f in os.listdir(SCRIPTS_DIR) if f.endswith(".py"))
+    print("\n=== CUSTOM SCRIPTS IN ~/AI-Checkmate/scripts/ ===")
+    for f in py_files:
+        print(f"  - {f}")
+    if not py_files:
+        print("  (No .py scripts found yet)")
+    print("Run any script with: run <script_name.py> [args]\n")
+
+def run_custom_script(cmd_str: str):
+    parts = cmd_str.split()
+    if not parts:
+        list_custom_scripts()
+        return
+    name = parts if parts.endswith(".py") else parts + ".py"
+    path = os.path.join(SCRIPTS_DIR, os.path.basename(name))
+    if not os.path.exists(path):
+        print(f"[Error] Not found: {path}\n")
+        return
+    py_exec = os.path.join(BASE_DIR, "venv", "bin", "python3")
+    if not os.path.exists(py_exec):
+        py_exec = "python3"
+    print(f"[Executing] {name} ...\n")
+    subprocess.run([py_exec, path] + parts[1:], cwd=BASE_DIR)
+    print()
+
 def main():
     git_pull()
     print("\n=== CHECKMATE LOCAL AI (Search + Scrape + PDF + GitHub Sync) ===")

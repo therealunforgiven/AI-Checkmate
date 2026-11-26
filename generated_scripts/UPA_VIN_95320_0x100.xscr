@@ -1,0 +1,28 @@
+// Auto-generated UPA-USB Pascal Script (.xscr) by Checkmate
+// Target Chip: 95320 | Mode: VIN | Start Offset: 0x100
+// Generated: 2026-11-26 16:24
+program Write_VIN_95320;
+begin
+  if MsgBox('Write VIN (1FTFW1ET4DFC10312) to 95320 at 0x100?', 'Confirm Write', MB_YESNO) = IDYES then
+  begin
+    SetByteHexEdit($100, $31); // '1'
+    SetByteHexEdit($101, $46); // 'F'
+    SetByteHexEdit($102, $54); // 'T'
+    SetByteHexEdit($103, $46); // 'F'
+    SetByteHexEdit($104, $57); // 'W'
+    SetByteHexEdit($105, $31); // '1'
+    SetByteHexEdit($106, $45); // 'E'
+    SetByteHexEdit($107, $54); // 'T'
+    SetByteHexEdit($108, $34); // '4'
+    SetByteHexEdit($109, $44); // 'D'
+    SetByteHexEdit($10A, $46); // 'F'
+    SetByteHexEdit($10B, $43); // 'C'
+    SetByteHexEdit($10C, $31); // '1'
+    SetByteHexEdit($10D, $30); // '0'
+    SetByteHexEdit($10E, $33); // '3'
+    SetByteHexEdit($10F, $31); // '1'
+    SetByteHexEdit($110, $32); // '2'
+    RefreshHexEdit;
+    MsgBox('VIN written to buffer! Click Program to flash chip.', 'Done', MB_OK);
+  end;
+end.

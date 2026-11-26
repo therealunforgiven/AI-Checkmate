@@ -1,0 +1,27 @@
+// Auto-generated UPA-USB Pascal Script (.xscr) by Checkmate
+// Target Chip: 0L15Y | Mode: ISN | Start Offset: 0x0
+// Generated: 2026-11-26 16:24
+program Write_ISN_0L15Y;
+begin
+  if MsgBox('Write ISN (4A7F92C10E883B19D45C6A2190F37E12) to 0L15Y at 0x0?', 'Confirm Write', MB_YESNO) = IDYES then
+  begin
+    SetByteHexEdit($0, $4A); // 'J'
+    SetByteHexEdit($1, $7F); // '.'
+    SetByteHexEdit($2, $92); // '.'
+    SetByteHexEdit($3, $C1); // '.'
+    SetByteHexEdit($4, $0E); // '.'
+    SetByteHexEdit($5, $88); // '.'
+    SetByteHexEdit($6, $3B); // ';'
+    SetByteHexEdit($7, $19); // '.'
+    SetByteHexEdit($8, $D4); // '.'
+    SetByteHexEdit($9, $5C); // '\'
+    SetByteHexEdit($A, $6A); // 'j'
+    SetByteHexEdit($B, $21); // '!'
+    SetByteHexEdit($C, $90); // '.'
+    SetByteHexEdit($D, $F3); // '.'
+    SetByteHexEdit($E, $7E); // '~'
+    SetByteHexEdit($F, $12); // '.'
+    RefreshHexEdit;
+    MsgBox('ISN written to buffer! Click Program to flash chip.', 'Done', MB_OK);
+  end;
+end.
