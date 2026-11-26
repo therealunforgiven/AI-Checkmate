@@ -282,6 +282,17 @@ class CheckmateGUI:
         self.sh_entry = tk.Entry(r, width=36, bg="#0f172a", fg="#22c55e", insertbackground="white")
         self.sh_entry.pack(side="left", padx=4)
         tk.Button(r, text="Run", bg="#16a34a", fg="white", command=lambda: self.run_sh(self.sh_entry.get())).pack(side="left", padx=2)
+        tk.Button(r, text="Pull GitHub Repo", bg="#7c3aed", fg="white", font=("Liberation Sans", 11, "bold"), command=self.action_pull_repo).pack(side="left", padx=4)
+
+    def action_pull_repo(self):
+        repo = self.sh_entry.get().strip()
+        if not repo:
+            self.sh_entry.configure(highlightthickness=2, highlightbackground="#facc15", highlightcolor="#facc15")
+            self.sh_entry.focus_set()
+            self.log("\n[Paste GitHub Repo Above First] Example: therealunforgiven/AI-Checkmate or https://github.com\n")
+            return
+        self.sh_entry.delete(0, "end")
+        self.run_bg(self.run_script, "repo_puller.py", (repo, "all"))
 
     def open_term(self):
         c = f"cd '{BASE_DIR}' && source venv/bin/activate && exec bash"

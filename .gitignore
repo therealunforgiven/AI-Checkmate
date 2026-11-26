@@ -4,3 +4,4 @@ __pycache__/
 generated_pdfs/
 backups/
 knowledge_index.db
+external_repos/
