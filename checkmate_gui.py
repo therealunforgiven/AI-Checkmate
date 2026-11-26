@@ -17,27 +17,33 @@ class CheckmateGUI:
     def __init__(self, root):
         self.root = root
         self.root.title("Car and Computer Electric - Checkmate Workstation")
-        self.root.geometry("1040x730")
+        self.root.geometry("1220x820")
         self.root.configure(bg="#141b24")
+        self.root.tk.call("tk", "scaling", 1.35)
+        self.console_font_size = 13
 
         style = ttk.Style()
         style.theme_use("clam")
         style.configure("TNotebook", background="#141b24", borderwidth=0)
-        style.configure("TNotebook.Tab", background="#1e293b", foreground="#e2e8f0", padding=(10, 6), font=("Liberation Sans", 9, "bold"))
+        style.configure("TNotebook.Tab", background="#1e293b", foreground="#e2e8f0", padding=(10, 6), font=("Liberation Sans", 12, "bold"))
         style.map("TNotebook.Tab", background=(("selected", "#2563eb"),), foreground=(("selected", "#ffffff"),))
         style.configure("TFrame", background="#1e293b")
-        style.configure("TLabel", background="#1e293b", foreground="#f8fafc", font=("Liberation Sans", 10))
-        style.configure("Header.TLabel", background="#141b24", foreground="#38bdf8", font=("Liberation Sans", 14, "bold"))
+        style.configure("TLabel", background="#1e293b", foreground="#f8fafc", font=("Liberation Sans", 13))
+        style.configure("Header.TLabel", background="#141b24", foreground="#38bdf8", font=("Liberation Sans", 18, "bold"))
 
         top_bar = tk.Frame(root, bg="#141b24", pady=8, padx=12)
         top_bar.pack(fill="x")
         ttk.Label(top_bar, text="CHECKMATE AI & BENCH WORKSTATION", style="Header.TLabel").pack(side="left")
 
-        tk.Button(top_bar, text="Sync to GitHub", bg="#16a34a", fg="white", font=("Liberation Sans", 9, "bold"),
+                tk.Button(top_bar, text="Font +", bg="#334155", fg="white", font=("Liberation Sans", 11, "bold"),
+                  relief="flat", padx=8, pady=4, command=lambda: self.change_font(2)).pack(side="right", padx=3)
+        tk.Button(top_bar, text="Font -", bg="#334155", fg="white", font=("Liberation Sans", 11, "bold"),
+                  relief="flat", padx=8, pady=4, command=lambda: self.change_font(-2)).pack(side="right", padx=3)
+        tk.Button(top_bar, text="Sync to GitHub", bg="#16a34a", fg="white", font=("Liberation Sans", 12, "bold"),
                   relief="flat", padx=10, pady=4, command=self.action_git_sync).pack(side="right", padx=4)
-        tk.Button(top_bar, text="Open PDFs", bg="#0284c7", fg="white", font=("Liberation Sans", 9, "bold"),
+        tk.Button(top_bar, text="Open PDFs", bg="#0284c7", fg="white", font=("Liberation Sans", 12, "bold"),
                   relief="flat", padx=10, pady=4, command=lambda: self.open_folder("generated_pdfs")).pack(side="right", padx=4)
-        tk.Button(top_bar, text="Open Scripts", bg="#475569", fg="white", font=("Liberation Sans", 9, "bold"),
+        tk.Button(top_bar, text="Open Scripts", bg="#475569", fg="white", font=("Liberation Sans", 12, "bold"),
                   relief="flat", padx=10, pady=4, command=lambda: self.open_folder("generated_scripts")).pack(side="right", padx=4)
 
         self.notebook = ttk.Notebook(root)
@@ -56,14 +62,18 @@ class CheckmateGUI:
 
         hdr = tk.Frame(console_frame, bg="#141b24")
         hdr.pack(fill="x")
-        tk.Label(hdr, text="LIVE WORKSTATION CONSOLE", bg="#141b24", fg="#94a3b8", font=("Liberation Sans", 9, "bold")).pack(side="left")
-        tk.Button(hdr, text="Clear", bg="#334155", fg="#e2e8f0", font=("Liberation Sans", 8), relief="flat", padx=8,
+        tk.Label(hdr, text="LIVE WORKSTATION CONSOLE", bg="#141b24", fg="#94a3b8", font=("Liberation Sans", 12, "bold")).pack(side="left")
+        tk.Button(hdr, text="Clear", bg="#334155", fg="#e2e8f0", font=("Liberation Sans", 11), relief="flat", padx=8,
                   command=lambda: self.console.delete("1.0", "end")).pack(side="right")
 
         self.console = scrolledtext.ScrolledText(console_frame, height=15, bg="#0b0f14", fg="#22c55e",
-                                                 insertbackground="white", font=("Liberation Mono", 9), wrap="word")
+                                                 insertbackground="white", font=("Liberation Mono", 13), wrap="word")
         self.console.pack(fill="both", expand=True, pady=(4, 0))
         self.log("Checkmate 7-Tab Workstation Online.\n")
+
+    def change_font(self, delta):
+        self.console_font_size = max(10, min(24, self.console_font_size + delta))
+        self.console.configure(font=("Liberation Mono", self.console_font_size))
 
     def log(self, text):
         self.root.after(0, lambda: (self.console.insert("end", text), self.console.see("end")))
@@ -89,7 +99,7 @@ class CheckmateGUI:
     def build_tab_chat(self):
         tab = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(tab, text="1. AI Chat")
-        self.chat_entry = tk.Entry(tab, font=("Liberation Sans", 10), bg="#0f172a", fg="white", insertbackground="white")
+        self.chat_entry = tk.Entry(tab, font=("Liberation Sans", 13), bg="#0f172a", fg="white", insertbackground="white")
         self.chat_entry.pack(fill="x", pady=4)
         self.chat_entry.bind("<Return>", lambda e: self.action_chat())
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
@@ -155,7 +165,7 @@ class CheckmateGUI:
     def build_tab_docs(self):
         tab = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(tab, text="4. PDFs & TSBs")
-        self.doc_entry = tk.Entry(tab, font=("Liberation Sans", 10), bg="#0f172a", fg="white", insertbackground="white")
+        self.doc_entry = tk.Entry(tab, font=("Liberation Sans", 13), bg="#0f172a", fg="white", insertbackground="white")
         self.doc_entry.pack(fill="x", pady=4)
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
         tk.Button(r, text="Pull NHTSA TSBs", bg="#0284c7", fg="white", command=lambda: self.run_bg(lambda: (checkmate.fetch_nhtsa_tsbs(self.doc_entry.get()), self.log("[TSB PDF Ready]\n")))).pack(side="left", padx=4)
@@ -165,7 +175,7 @@ class CheckmateGUI:
     def build_tab_money(self):
         tab = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(tab, text="5. Money & CSV")
-        self.tx_entry = tk.Entry(tab, font=("Liberation Sans", 10), bg="#0f172a", fg="white", insertbackground="white")
+        self.tx_entry = tk.Entry(tab, font=("Liberation Sans", 13), bg="#0f172a", fg="white", insertbackground="white")
         self.tx_entry.pack(fill="x", pady=4)
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
         tk.Button(r, text="+ Money In", bg="#16a34a", fg="white", command=lambda: self.run_bg(lambda: (checkmate.log_transaction("Money In", self.tx_entry.get()), self.log("[Income Logged]\n")))).pack(side="left", padx=4)
@@ -185,7 +195,7 @@ class CheckmateGUI:
         tab = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(tab, text="7. Advanced & Terminal")
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
-        tk.Button(r, text="Open Ubuntu Terminal", bg="#0f172a", fg="#38bdf8", font=("Liberation Sans", 9, "bold"), padx=10, command=self.open_term).pack(side="left", padx=4)
+        tk.Button(r, text="Open Ubuntu Terminal", bg="#0f172a", fg="#38bdf8", font=("Liberation Sans", 12, "bold"), padx=10, command=self.open_term).pack(side="left", padx=4)
         tk.Button(r, text="Git Pull", bg="#0284c7", fg="white", padx=10, command=lambda: self.run_sh("git pull origin main")).pack(side="left", padx=4)
         tk.Button(r, text="Ollama List", bg="#0d9488", fg="white", padx=10, command=lambda: self.run_sh("ollama list")).pack(side="left", padx=4)
         self.sh_entry = tk.Entry(r, width=36, bg="#0f172a", fg="#22c55e", insertbackground="white")
