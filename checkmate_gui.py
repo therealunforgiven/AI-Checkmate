@@ -96,9 +96,17 @@ class CheckmateGUI:
         except Exception as e:
             self.log(f"[Error] {e}\n")
 
+    def prompt_box(self, lbl, ent, hint):
+        lbl.configure(text=hint, fg="#facc15")
+        ent.configure(highlightthickness=2, highlightbackground="#facc15", highlightcolor="#facc15")
+        ent.focus_set()
+        self.log(f"\n[Ready] {hint}\n")
+
     def build_tab_chat(self):
         tab = ttk.Frame(self.notebook, padding=10)
         self.notebook.add(tab, text="1. AI Chat")
+        self.chat_hint = tk.Label(tab, text="TYPE HERE -> Ask AI, Search a Topic, or Paste a URL:", bg="#1e293b", fg="#38bdf8", font=("Liberation Sans", 11, "bold"), anchor="w")
+        self.chat_hint.pack(fill="x", pady=(0, 3))
         self.chat_entry = tk.Entry(tab, font=("Liberation Sans", 13), bg="#0f172a", fg="white", insertbackground="white")
         self.chat_entry.pack(fill="x", pady=4)
         self.chat_entry.bind("<Return>", lambda e: self.action_chat())
@@ -109,7 +117,9 @@ class CheckmateGUI:
 
     def action_chat(self):
         q = self.chat_entry.get().strip()
-        if not q: return
+        if not q:
+            self.prompt_box(self.chat_hint, self.chat_entry, "TYPE QUESTION ABOVE -> Ex: How to test BMW E70 CAS3+ KL15 wake-up?")
+            return
         self.chat_entry.delete(0, "end")
         self.log(f"\nYou > {q}\n[Thinking ...]\n")
         def w():
@@ -120,13 +130,17 @@ class CheckmateGUI:
 
     def action_search(self):
         t = self.chat_entry.get().strip()
-        if not t: return
+        if not t:
+            self.prompt_box(self.chat_hint, self.chat_entry, "TYPE TOPIC ABOVE -> Ex: BMW E70 X5 CAS3+ 0L15Y BDM pinout")
+            return
         self.log(f"\n[Searching] {t} ...\n")
         self.run_bg(lambda: (checkmate.search_and_learn(t), self.log("[Saved to knowledge/]\n")))
 
     def action_url(self):
         u = self.chat_entry.get().strip()
-        if not u.startswith("http"): return
+        if not u.startswith("http"):
+            self.prompt_box(self.chat_hint, self.chat_entry, "PASTE FULL URL ABOVE -> Ex: https://wikipedia.org")
+            return
         self.log(f"\n[Scraping] {u} ...\n")
         self.run_bg(lambda: (checkmate.learn_from_url(u), self.log("[Saved to knowledge/]\n")))
 
