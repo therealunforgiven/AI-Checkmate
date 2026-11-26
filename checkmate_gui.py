@@ -113,7 +113,7 @@ class CheckmateGUI:
         r = tk.Frame(tab, bg="#1e293b"); r.pack(fill="x", pady=4)
         tk.Button(r, text="Ask AI", bg="#2563eb", fg="white", padx=12, command=self.action_chat).pack(side="left", padx=4)
         tk.Button(r, text="Search & Learn Topic", bg="#0d9488", fg="white", padx=12, command=self.action_search).pack(side="left", padx=4)
-                tk.Button(r, text="Save Full Report to Desktop (PDF)", bg="#d97706", fg="white", font=("Liberation Sans", 11, "bold"), padx=12, command=self.action_desktop_pdf).pack(side="left", padx=4)
+        tk.Button(r, text="Save Full Report to Desktop (PDF)", bg="#d97706", fg="white", font=("Liberation Sans", 11, "bold"), padx=12, command=self.action_desktop_pdf).pack(side="left", padx=4)
         tk.Button(r, text="Scrape URL", bg="#6366f1", fg="white", padx=12, command=self.action_url).pack(side="left", padx=4)
 
     def action_chat(self):
