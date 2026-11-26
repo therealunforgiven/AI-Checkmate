@@ -155,8 +155,8 @@ def make_desktop_pdf(topic: str):
     return out_pdf
 
 def make_pdf_interactive(topic: str):
-    kb = load_knowledge()
-    prompt = f"{kb}\n\nCreate a detailed, print-ready document for:\n{topic}" if kb else topic
+    kb = get_or_fetch_context(topic)
+    prompt = f"Verified Reference Data:\n{kb}\n\nCreate a detailed, print-ready document for:\n{topic}" if kb else topic
     system = (
         "Output ONLY valid semantic HTML (<h1>, <h2>, <p>, <ul>, <li>, <table>, "
         "<thead>, <tbody>, <tr>, <th>, <td>, <div class='callout'>) with zero markdown "
