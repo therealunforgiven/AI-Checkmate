@@ -297,7 +297,6 @@ if __name__ == "__main__":
 
 
 
-```bash
 python3 - << 'EOF'
 from scripts.eeprom_vin_isn_tool import swap_16bit_bytes
 
