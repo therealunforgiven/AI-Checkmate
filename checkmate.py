@@ -72,28 +72,12 @@ def ask_ollama(prompt: str, system: str = "You are Checkmate, a technical AI ass
     )
     return resp.json().get("response", "").strip()
 
-def load_knowledge(query: str = "", max_chars: int = 14000) -> str:
+def load_knowledge(query: str = "", max_chars: int = 3200) -> str:
     if isinstance(query, int):
         max_chars = query
         query = ""
-    files = sorted(glob.glob(os.path.join(KNOWLEDGE_DIR, "*.txt")) + glob.glob(os.path.join(KNOWLEDGE_DIR, "*.md")))
-    keywords = tuple(w.lower() for w in re.findall(r"[a-zA-Z0-9_]+", str(query)) if len(w) >= 2)
-    scored = list()
-    for path in files:
-        with open(path, "r", encoding="utf-8") as f:
-            txt = f.read()
-        low_all = (os.path.basename(path) + " " + txt).lower()
-        score = sum(low_all.count(k) * 5 for k in keywords)
-        scored.append((score, os.path.basename(path), txt))
-    scored.sort(key=lambda item: next(iter(item)), reverse=True)
-    chunks, total = list(), 0
-    for score, fname, txt in scored:
-        entry = f"=== KNOWLEDGE: {fname} ===\n{txt}\n"
-        if total + len(entry) > int(max_chars):
-            continue
-        chunks.append(entry)
-        total += len(entry)
-    return "\n".join(chunks)
+    from scripts.knowledge_index import query_index
+    return query_index(query, int(max_chars))
 
 def scrape_text(url: str) -> str:
     headers = {"User-Agent": "Mozilla/5.0 (X11; Linux x86_64)"}
@@ -117,7 +101,7 @@ def learn_from_url(url: str):
     out_path = os.path.join(KNOWLEDGE_DIR, f"{stamp}_{slug}.md")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(f"Source URL: {url}\n\n{summary}\n")
-    print(f"[Learned!] Saved to: {out_path}\n")
+    from scripts.knowledge_index import rebuild_index; rebuild_index(); print(f"[Learned & Indexed!] Saved to: {out_path}\n")
 
 def search_and_learn(topic: str, max_results: int = 3):
     print(f"[DuckDuckGo] Searching: {topic} ...")
@@ -150,7 +134,7 @@ def search_and_learn(topic: str, max_results: int = 3):
     out_path = os.path.join(KNOWLEDGE_DIR, f"{stamp}_ddg_{slug}.md")
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(f"Search Topic: {topic}\n\n{summary}\n")
-    print(f"[Learned!] Saved to: {out_path}\n")
+    from scripts.knowledge_index import rebuild_index; rebuild_index(); print(f"[Learned & Indexed!] Saved to: {out_path}\n")
 
 
 DESKTOP_DIR = os.path.expanduser("~/Desktop")

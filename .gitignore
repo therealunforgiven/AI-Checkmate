@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 generated_pdfs/
 backups/
+knowledge_index.db
