@@ -35,7 +35,7 @@ class CheckmateGUI:
         top_bar.pack(fill="x")
         ttk.Label(top_bar, text="CHECKMATE AI & BENCH WORKSTATION", style="Header.TLabel").pack(side="left")
 
-                tk.Button(top_bar, text="Font +", bg="#334155", fg="white", font=("Liberation Sans", 11, "bold"),
+        tk.Button(top_bar, text="Font +", bg="#334155", fg="white", font=("Liberation Sans", 11, "bold"),
                   relief="flat", padx=8, pady=4, command=lambda: self.change_font(2)).pack(side="right", padx=3)
         tk.Button(top_bar, text="Font -", bg="#334155", fg="white", font=("Liberation Sans", 11, "bold"),
                   relief="flat", padx=8, pady=4, command=lambda: self.change_font(-2)).pack(side="right", padx=3)
