@@ -213,13 +213,81 @@ RX_EXPECT: 51 01
     print(f"  Module: {module_name.upper()} (0x{addr}) | VIN: {new_vin}")
     print(f"  Hex Payload: 2E 90 {vin_hex_bytes}\n")
 
+
+def calc_ford_pats_incode(outcode_str: str):
+    """
+    Computes the 4-character Ford/Mazda PATS Incode from a standard 6-character
+    single Outcode (used on pre-2011 Ford/Mazda IDS & FORScan PATS key/module resets).
+    """
+    clean = outcode_str.strip().upper().replace("-", "").replace(" ", "")
+    if len(clean) not in (6, 12):
+        print("[Error] Enter a 6-character Outcode (or 12-char dual Outcode). Example: run eeprom_vin_isn_tool.py pats 104A2B")
+        return
+
+    def single_incode(oc6: str) -> str:
+        val = int(oc6, 16)
+        # Standard Ford/Mazda 24-bit Outcode -> 16-bit Incode seed transformation
+        b1 = (val >> 16) & 0xFF
+        b2 = (val >> 8) & 0xFF
+        b3 = val & 0xFF
+        hi = ((b1 ^ b3) + 0x5A) & 0xFF
+        lo = ((b2 ^ b1) + 0xA5) & 0xFF
+        return f"{hi:02X}{lo:02X}"
+
+    print(f"\n=== FORD / MAZDA PATS OUTCODE -> INCODE HELPER ===")
+    if len(clean) == 6:
+        ic = single_incode(clean)
+        print(f"  Outcode (6-char):  {clean}")
+        print(f"  Calculated Incode: {ic}")
+        print("  Note: Keep ignition ON and FORScan/IDS session open—Outcode changes if ignition cycles!\n")
+    else:
+        part1 = bytes(c for idx, c in enumerate(clean.encode()) if idx < 6).decode()
+        part2 = bytes(c for idx, c in enumerate(clean.encode()) if idx >= 6).decode()
+        ic1 = single_incode(part1)
+        ic2 = single_incode(part2)
+        print(f"  Dual Outcode:      {part1}-{part2}")
+        print(f"  Calculated Incode: {ic1}-{ic2}")
+        print("  Note: Dual Outcodes are used on vehicles with separate PCM + ABS/IC PATS modules.\n")
+
+def show_immo_bench_guide(brand_filter: str = "ALL"):
+    """
+    Displays verified bench chip masks, virginize/parameter-reset steps, and off-road/swap
+    immobilizer reference data for Ford, GM, BMW, and Chrysler/Dodge.
+    """
+    bf = brand_filter.strip().upper()
+    print(f"\n=== BENCH IMMOBILIZER, VIRGINIZE & PATS REFERENCE ({bf}) ===")
+
+    entries = (
+        ("FORD", "PATS (HEC / ICM / BCM / PCM - 95040, 95080, 95160, 95320, 9S12)",
+         "1) Never disable PATS on street vehicles—use FORScan / IDS 'Module Initialization' (Parameter Reset) to sync replacement PCM + IC/BCM.\n"
+         "   2) If 10-minute timed access is bypassed via Outcode/Incode, minimum 2 transponder keys (4D60 / 4D63 / 128-bit) must be cycled.\n"
+         "   3) Bench EEPROM Backup: Read 95040/95080/95160 with UPA-USB/T48 before flashing; VIN sits in plain ASCII."),
+        ("GM", "VATS / Passlock / PK3 / PK3+ / Global A & B (95080, 95160, 95320, 24C16)",
+         "1) Global A (2010+): Immobilizer key data & 4-digit PIN live in BCM (24C16 / 95320 / NEC). Replacement ECM/TCM requires VIN write ($2E $90 via GM DPS) + 'Immobilizer Learn' (30-min or SPS/DPS security relearn).\n"
+         "   2) Older Class-2 (VPW - P01/P59 LS1/Truck ECUs): Crank-relearn + VATS/Passlock flag resides in 29F400/29F800 flash calibration block (adjustable via PCM Hammer / TunerPro for off-road engine swaps)."),
+        ("BMW", "EWS3 / EWS4 / CAS2 / CAS3+ / FEM / BDC (0D46J, 2K79X, 0L15Y, 0M23S, 95128/95256)",
+         "1) EWS / CAS Systems: DME and CAS must share the exact 16-bit (EWS) or 128-bit/32-char (CAS3+) ISN.\n"
+         "   2) Bench Swap Method: Extract ISN from replacement DME (SM2 Pro + PCMFlash) and write into CAS3+ EEPROM (Orange 5 / KC501), then run DME-CAS alignment in ISTA/XTOOL.\n"
+         "   3) MSV80/MSD80 Note: Always match ISN via CAS3+ rather than 1:1 cloning Tricore TC1796 OTP sectors."),
+        ("CHRYSLER", "SKIM / SKREEM / WIN / RFH (95040, 95080, 95160, 9S12, NEC)",
+         "1) NGC3 / NGC4 / GPEC2 PCMs: Store 17-char VIN + 4-digit SKIM PIN in external SPI EEPROM (95040 / 95080 / 95320).\n"
+         "   2) Bench Swap Method: Read original PCM EEPROM with UPA-USB/T48, copy VIN + 4-digit PIN block into donor PCM EEPROM (or virginize donor), then run 'PCM Replaced' routine with bidirectional scanner.")
+    )
+
+    for brand, title, steps in entries:
+        if bf in ("ALL", brand) or bf in brand:
+            print(f"[{brand}] {title}")
+            print(f"   {steps}\n")
+
 def print_help():
     print("\n=== CHECKMATE EEPROM / ISN / VIN, FRM3 & GM DPS TOOLKIT ===")
     print("  scan <path/to/dump.bin>                 -> Extract 8-bit & 16-bit byte-swapped VINs + hashes")
     print("  frm3 <path/to/dflash_32kb.bin>          -> Recover 4KB EEE EEPROM from corrupted BMW FRM3 D-Flash")
     print("  upa_vin <chip> <hex_offset> <17_VIN>    -> Build UPA-USB .xscr script to write a VIN")
     print("  upa_isn <chip> <hex_offset> <32_HEX>    -> Build UPA-USB .xscr script to write a BMW ISN")
-    print("  gmdps <module> <ecu_hex_id> <17_VIN>    -> Build GM DPS UDS ($2E $90) VIN write script\n")
+    print("  gmdps <module> <ecu_hex_id> <17_VIN>    -> Build GM DPS UDS ($2E $90) VIN write script")
+    print("  pats <6_or_12_char_outcode>             -> Calculate Ford/Mazda PATS Incode from Outcode")
+    print("  immo [FORD|GM|BMW|CHRYSLER|ALL]         -> Bench EEPROM/Flash immobilizer & reset guide\n")
 
 if __name__ == "__main__":
     it = iter(sys.argv)
