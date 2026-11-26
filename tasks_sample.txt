@@ -1,0 +1,4 @@
+# Add one research or chess/diagnostic prompt per line, then run:
+# run cluster_dispatch.py batch ~/AI-Checkmate/tasks_sample.txt
+Explain the BMW E70 X5 BSD single-wire bus fault isolation procedure step by step.
+Explain how to safely write a VIN to a GM Global A BCM using UDS service 2E 90 in GM DPS.

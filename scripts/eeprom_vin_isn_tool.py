@@ -82,6 +82,8 @@ def repair_frm3_dflash(dflash_path: str):
     if not os.path.exists(dflash_path):
         print(f"[Error] D-Flash file not found: {dflash_path}")
         return
+    print("[Safety Check] Running mandatory pre-flash backup before FRM3 recovery ...")
+    auto_backup_flash(dflash_path)
     with open(dflash_path, "rb") as f:
         dflash = f.read()
 
