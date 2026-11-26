@@ -279,6 +279,71 @@ def show_immo_bench_guide(brand_filter: str = "ALL"):
             print(f"[{brand}] {title}")
             print(f"   {steps}\n")
 
+
+def lookup_bench_pinout(query: str = "ALL"):
+    """
+    Displays verified bench power, ground, ignition, and CAN/GPT pinouts for
+    common BMW, GM, Ford, and Chrysler ECMs, PCMs, and TCMs.
+    """
+    q = query.strip().upper()
+    print(f"\n=== BENCH ECM / PCM / TCM PINOUT LOOKUP ({q}) ===")
+
+    pinouts = (
+        ("BMW MSV80 / MSD80 / MSD81 (N52 / N54 / N62 DME - E70 X5, E90, E60)",
+         "Connector X60007 (26-Pin / Sub-connector) & Main Harness:\n"
+         "   - GND (KL31):       X60001 Pin 1 / Pin 2 (Brown)\n"
+         "   - Constant 12V (KL30): X60007 Pin 1 & Pin 2 (Red/White)\n"
+         "   - Ignition 12V (KL15): X60007 Pin 13 (Green/White)\n"
+         "   - PT-CAN High:      X60007 Pin 3 (Blue/Red)  |  PT-CAN Low: X60007 Pin 4 (Red)\n"
+         "   - Note: Add 120-ohm resistor across PT-CAN High & Low for bench OBD/ICOM comms."),
+        ("BMW MEVD17.2 / EDC17CP09 (N55 / M57 Diesel - 2010-2013 E70 X5, F-Series)",
+         "Main Connector (Bench Mode — SM2 Pro + PCMFlash Module 71 Cover-Free):\n"
+         "   - GND (KL31):       Pin 2 (Large Brown)\n"
+         "   - Constant 12V (KL30): Pin 1 & Pin 15\n"
+         "   - Ignition 12V (KL15): Pin 16\n"
+         "   - CAN-High:         Pin 46  |  CAN-Low: Pin 33\n"
+         "   - GPT1 / GPT2:      Connect GPT1 & GPT2 breakout leads per SM2 Pro Module 71 diagram."),
+        ("BMW EGS 6HP19 / 6HP21 / 8HP45 Transmission Mechatronic (16-Pin Round Connector)",
+         "Round Transmission Sleeve Connector (Bench / Under-Car Test):\n"
+         "   - GND (KL31):       Pin 13 (Brown)\n"
+         "   - Switched 12V (KL87 from E-Box): Pin 14 (Red/Yellow — fed by the 3 main E-Box fuses!)\n"
+         "   - Ignition Wake-Up (KL15_WUP):    Pin 16 (Yellow/Green — from CAS3+ Pin 19)\n"
+         "   - PT-CAN High:      Pin 1 (Blue/Red)  |  PT-CAN Low: Pin 2 (Red)"),
+        ("GM E38 / E67 ECM (2007-2014 LS2 / LS3 / 5.3L / 6.0L / 6.2L Trucks & Cars)",
+         "Connector X1 (Black 73-Pin Connector — Bench OBD / GM DPS / HP Tuners):\n"
+         "   - GND (KL31):       Case Ground or X1 Pin 73 (Black/White)\n"
+         "   - Constant 12V (B+): X1 Pin 20 (Red/White)\n"
+         "   - Ignition 12V (IGN): X1 Pin 19 (Pink)\n"
+         "   - GMLAN High (CAN+): X1 Pin 27 (Tan/Black)  |  GMLAN Low (CAN-): X1 Pin 28 (Tan)"),
+        ("GM T43 TCM (6L80 / 6L90 6-Speed Automatic Transmission Internal TCM)",
+         "External 16-Pin Transmission Bulkhead Connector (Bench GM DPS / VIN Write 0x7E1):\n"
+         "   - GND (KL31):       Pin 14 (Black/White)\n"
+         "   - Constant 12V (B+): Pin 11 (Red/White)\n"
+         "   - Ignition 12V (IGN): Pin 12 (Pink)\n"
+         "   - GMLAN High (CAN+): Pin 7 (Tan/Black)  |  GMLAN Low (CAN-): Pin 6 (Tan)"),
+        ("FORD 60-Pin / 70-Pin / 3-Plug PCM (F-150 / Super Duty / Explorer CAN-Bus)",
+         "Body / Chassis Connector (C175B / B-Plug — Bench FORScan / PCMFlash):\n"
+         "   - GND (KL31):       Pins 51, 52, 53 (Black/White)\n"
+         "   - Constant 12V (KAPWR): Pin 45 (Orange/Light Green)\n"
+         "   - Ignition 12V (VPWR): Pins 35, 36 (White/Light Blue)\n"
+         "   - HS-CAN High (+):  Pin 47 (White/Blue)  |  HS-CAN Low (-): Pin 48 (White)"),
+        ("CHRYSLER / DODGE NGC3 / NGC4 / GPEC2 PCM (4-Plug C1 Black Connector)",
+         "Connector C1 (Black 38-Pin Connector — Bench OBD / AlfaOBD / J2534):\n"
+         "   - GND (KL31):       C1 Pin 9 & Pin 18 (Black/Tan)\n"
+         "   - Constant 12V (B+): C1 Pin 11 (Red/White)\n"
+         "   - Ignition 12V (RUN): C1 Pin 29 (Pink/Yellow)\n"
+         "   - CAN-C High (+):   C1 Pin 20 (White/Light Green)  |  CAN-C Low (-): C1 Pin 19 (White/Light Blue)")
+    )
+
+    found = False
+    for title, body in pinouts:
+        if q == "ALL" or all(word in title.upper() or word in body.upper() for word in q.split()):
+            print(f"[{title}]")
+            print(f"   {body}\n")
+            found = True
+    if not found:
+        print(f"  No exact preset match for '{query}'. Try: pinout BMW, pinout GM, pinout T43, pinout FORD, or pinout ALL\n")
+
 def print_help():
     print("\n=== CHECKMATE EEPROM / ISN / VIN, FRM3 & GM DPS TOOLKIT ===")
     print("  scan <path/to/dump.bin>                 -> Extract 8-bit & 16-bit byte-swapped VINs + hashes")
@@ -287,7 +352,8 @@ def print_help():
     print("  upa_isn <chip> <hex_offset> <32_HEX>    -> Build UPA-USB .xscr script to write a BMW ISN")
     print("  gmdps <module> <ecu_hex_id> <17_VIN>    -> Build GM DPS UDS ($2E $90) VIN write script")
     print("  pats <6_or_12_char_outcode>             -> Calculate Ford/Mazda PATS Incode from Outcode")
-    print("  immo [FORD|GM|BMW|CHRYSLER|ALL]         -> Bench EEPROM/Flash immobilizer & reset guide\n")
+    print("  immo [FORD|GM|BMW|CHRYSLER|ALL]         -> Bench EEPROM/Flash immobilizer & reset guide")
+    print("  pinout [BMW|GM|T43|FORD|CHRYSLER|ALL]   -> Pull ECM / PCM / TCM bench power & CAN pinouts\n")
 
 if __name__ == "__main__":
     it = iter(sys.argv)
