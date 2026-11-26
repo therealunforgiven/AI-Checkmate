@@ -56,6 +56,7 @@ class CheckmateGUI:
         self.build_tab_money()
         self.build_tab_cluster()
         self.build_tab_advanced()
+        self.build_tab_laptop()
 
         console_frame = tk.Frame(root, bg="#141b24", padx=10, pady=6)
         console_frame.pack(fill="both", expand=True)
@@ -215,6 +216,28 @@ class CheckmateGUI:
         tk.Entry(f, textvariable=self.ip_var, width=18, bg="#0f172a", fg="white").pack(side="left", padx=4)
         tk.Button(f, text="Add IP", bg="#0284c7", fg="white", command=lambda: self.run_bg(self.run_script, "cluster_dispatch.py", ("add", self.ip_var.get()))).pack(side="left", padx=4)
         tk.Button(f, text="Status", bg="#16a34a", fg="white", command=lambda: self.run_bg(self.run_script, "cluster_dispatch.py", ("status",))).pack(side="left", padx=4)
+
+
+    def build_tab_laptop(self):
+        tab = ttk.Frame(self.notebook, padding=10)
+        self.notebook.add(tab, text="8. Laptop & Starters")
+
+        f1 = tk.Frame(tab, bg="#1e293b"); f1.pack(fill="x", pady=4)
+        ttk.Label(f1, text="Laptop BIOS (.bin):").pack(side="left")
+        self.bios_var = tk.StringVar()
+        tk.Entry(f1, textvariable=self.bios_var, width=42, bg="#0f172a", fg="white").pack(side="left", padx=4)
+        tk.Button(f1, text="Browse BIOS", bg="#475569", fg="white", font=("Liberation Sans", 11, "bold"),
+                  command=lambda: self.bios_var.set(filedialog.askopenfilename() or self.bios_var.get())).pack(side="left", padx=3)
+        tk.Button(f1, text="Scan BIOS / WinKey / ME", bg="#2563eb", fg="white", font=("Liberation Sans", 11, "bold"),
+                  command=lambda: self.run_bg(self.run_script, "laptop_bios_tool.py", ("scan", self.bios_var.get()))).pack(side="left", padx=3)
+
+        f2 = tk.Frame(tab, bg="#1e293b"); f2.pack(fill="x", pady=6)
+        tk.Button(f2, text="Generate All Blank Starter .BIN Files", bg="#16a34a", fg="white", font=("Liberation Sans", 11, "bold"),
+                  padx=10, command=lambda: self.run_bg(self.run_script, "laptop_bios_tool.py", ("init",))).pack(side="left", padx=4)
+        tk.Button(f2, text="Open Starter Files Folder", bg="#0284c7", fg="white", font=("Liberation Sans", 11, "bold"),
+                  padx=10, command=lambda: self.open_folder("starter_files")).pack(side="left", padx=4)
+        tk.Button(f2, text="1.8V vs 3.3V Laptop Chip Guide", bg="#d97706", fg="white", font=("Liberation Sans", 11, "bold"),
+                  padx=10, command=lambda: self.run_bg(self.run_script, "laptop_bios_tool.py", ("guide",))).pack(side="left", padx=4)
 
     def build_tab_advanced(self):
         tab = ttk.Frame(self.notebook, padding=10)
