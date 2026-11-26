@@ -1,3 +1,4 @@
+from stable_baselines3.common.callbacks import CheckpointCallback
 import gymnasium as gymnasium
 from gymnasium import spaces
 import numpy as np
@@ -127,7 +128,14 @@ model = PPO("MlpPolicy", env, verbose=1, learning_rate=0.0003, n_steps=2048)
 
 print("Starting AI Training Session... Press Ctrl+C to stop anytime.")
 # Increase timesteps here if you want it to run longer (e.g., 20000000 for a deep session)
-model.learn(total_timesteps=5000000)
+cb = CheckpointCallback(save_freq=100000, save_path="./", name_prefix="tetris_ckpt")
+try:
+    model.learn(total_timesteps=5000000, callback=cb)
+except KeyboardInterrupt:
+    print("\n[Stopped Early] Saving current Tetris AI weights to tetris_ai_model.zip ...")
+finally:
+    model.save("tetris_ai_model")
+    print("[Saved!] tetris_ai_model.zip updated cleanly.")
 
 # Save the trained model weights
 model.save("tetris_ai_model")
