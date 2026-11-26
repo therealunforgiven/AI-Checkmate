@@ -123,8 +123,8 @@ class CheckmateGUI:
         self.chat_entry.delete(0, "end")
         self.log(f"\nYou > {q}\n[Thinking ...]\n")
         def w():
-            kb = checkmate.load_knowledge()
-            ans = checkmate.ask_ollama(f"Reference:\n{kb}\n\nQuestion:\n{q}" if kb else q)
+            kb = checkmate.load_knowledge(q)
+            ans = checkmate.ask_ollama(f"Reference:\n{kb}\n\nUser Query (if a single module/term is typed, give full pinouts, chip mask & diagnostic steps):\n{q}" if kb else q)
             self.log(f"Checkmate > {ans}\n")
         self.run_bg(w)
 
