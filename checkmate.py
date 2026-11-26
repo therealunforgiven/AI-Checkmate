@@ -155,6 +155,30 @@ def make_desktop_pdf(topic: str):
     return out_pdf
 
 
+
+def render_pdf(body_html: str, out_filename: str):
+    from weasyprint import HTML
+    os.makedirs(PDF_DIR, exist_ok=True)
+    out_path = out_filename if os.path.isabs(out_filename) else os.path.join(PDF_DIR, out_filename)
+    today_str = datetime.date.today().strftime("%B %d, %Y")
+    css = (
+        "<style>"
+        "@page { size: letter; margin: 0.5in; }"
+        "body { font-family: 'Liberation Sans', Arial, sans-serif; font-size: 10.5pt; color: #111; line-height: 1.4; }"
+        "h1 { font-size: 16pt; color: #1e3a5f; border-bottom: 2px solid #1e3a5f; padding-bottom: 4px; margin-bottom: 8px; }"
+        "h2 { font-size: 12pt; color: #1e3a5f; margin-top: 12px; }"
+        ".summary-box { background: #f1f5f9; border-left: 4px solid #2563eb; padding: 8px 12px; margin: 10px 0; }"
+        "table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 9.5pt; }"
+        "th { background: #1e3a5f; color: #fff; text-align: left; padding: 6px 8px; border: 1px solid #1e3a5f; }"
+        "td { padding: 6px 8px; border: 1px solid #cbd5e1; vertical-align: top; }"
+        ".meta-date { font-size: 9pt; color: #475569; margin-bottom: 10px; }"
+        "</style>"
+    )
+    full_html = f"<!DOCTYPE html><html><head><meta charset='utf-8'>{css}</head><body><div class='meta-date'>Generated: {today_str} | Car and Computer Electric</div>{body_html}</body></html>"
+    HTML(string=full_html).write_pdf(out_path)
+    print(f"[PDF Ready] -> {out_path}")
+    return out_path
+
 def build_side_by_side_pdf(topic: str):
     print(f"[Side-by-Side PDF] Pulling local notes + live web data for: {topic} ...")
     local_kb = load_knowledge(topic, max_chars=2400) or "No matching local notes found in knowledge/ yet."
