@@ -297,18 +297,3 @@ if __name__ == "__main__":
 
 
 
-python3 - << 'EOF'
-from scripts.eeprom_vin_isn_tool import swap_16bit_bytes
-
-# 1. Create synthetic 16-bit byte-swapped 93C66 dump
-swapped_vin = swap_16bit_bytes(b"JF2SH6CC9AH712345")
-dump_93c66 = (b"\xFF" * 64) + swapped_vin + (b"\xFF" * (512 - 64 - 17))
-with open("/tmp/test_93c66.bin", "wb") as f:
-    f.write(dump_93c66)
-
-# 2. Create synthetic 32KB FRM3 D-Flash dump containing a VIN record at EEE offset 0x0100
-dflash = bytearray(b"\xFF" * 32768)
-rec = b"\x01\x00\x11WBAFE43589L123456"
-dflash = bytearray(rec) + dflash[len(rec):]
-with open("/tmp/test_frm3_dflash.bin", "wb") as f:
-    f.write(dflash)
