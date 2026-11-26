@@ -1,0 +1,8 @@
+BMW E70 X5 N52 MSV80 DME 30BA 30BB MOSFET repair and ISN read bench pinout
+BMW E70 X5 JBE Junction Box Electronics relay and K-CAN PT-CAN gateway pinout
+BMW E90 E70 FRM3 3M25J short circuit counter reset and D-Flash recovery procedure
+GM Global A BCM 24C16 95320 PIN extraction and GM DPS DID 90 VIN programming
+GM 6L80 T43 TCM bench pinout and GM DPS calibration flashing steps
+Ford F150 BCM 95320 EEPROM VIN location and FORScan PATS parameter reset
+Chrysler Dodge Ram GPEC2 PCM 95320 EEPROM SKIM PIN and VIN transfer procedure
+Micsig oscilloscope BMW N52 BSD alternator water pump oil sensor fault isolation
