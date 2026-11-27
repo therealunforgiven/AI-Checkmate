@@ -4,7 +4,6 @@ import sys
 import subprocess
 
 BASE_DIR = os.path.expanduser("~/AI-Checkmate")
-sys.path.insert(0, BASE_DIR)
 EXT_DIR = os.path.join(BASE_DIR, "external_repos")
 KNOWLEDGE_DIR = os.path.join(BASE_DIR, "knowledge")
 os.makedirs(EXT_DIR, exist_ok=True)

@@ -1,0 +1,61 @@
+=== OVERNIGHT KNOWLEDGE BUILDER STARTING (8 TOPICS) ===
+
+[1/8] Researching & Indexing: BMW E70 X5 N52 MSV80 DME 30BA 30BB MOSFET repair and ISN read bench pinout
+[DuckDuckGo] Searching: BMW E70 X5 N52 MSV80 DME 30BA 30BB MOSFET repair and ISN read bench pinout ...
+  [Warning] Skipped due to error: No results found.
+
+[2/8] Researching & Indexing: BMW E70 X5 JBE Junction Box Electronics relay and K-CAN PT-CAN gateway pinout
+[DuckDuckGo] Searching: BMW E70 X5 JBE Junction Box Electronics relay and K-CAN PT-CAN gateway pinout ...
+  [Warning] Skipped due to error: No results found.
+
+[3/8] Researching & Indexing: BMW E90 E70 FRM3 3M25J short circuit counter reset and D-Flash recovery procedure
+[DuckDuckGo] Searching: BMW E90 E70 FRM3 3M25J short circuit counter reset and D-Flash recovery procedure ...
+  (1) The Official Guide To Resetting A Short Circuit Fault In... -> https://www.bimmerfest.com/threads/the-official-guide-to-resetting-a-short-circuit-fault-in-a-frm-module.866044/
+  (2) Help with resetting short circuit counter on FRM - BIMMERPOST -> https://www.e90post.com/forums/showthread.php?t=1646741
+  (3) How to Perform a BMW FRM Short Circuit Reset (Step-by-Step Guide) -> https://autoexplain.com/bmw-frm-short-circuit-reset/
+[Digesting] Synthesizing search results into permanent knowledge ...
+  [Warning] Skipped due to error: HTTPConnectionPool(host='localhost', port=11434): Read timed out. (read timeout=300)
+
+[4/8] Researching & Indexing: GM Global A BCM 24C16 95320 PIN extraction and GM DPS DID 90 VIN programming
+[DuckDuckGo] Searching: GM Global A BCM 24C16 95320 PIN extraction and GM DPS DID 90 VIN programming ...
+  (1) BCM GM Technical Support – Body Control Module | Programming ... -> https://programming-car.com/gm-bcm-remote-programming
+  (2) How to Program a GM BCM with Launch X431: Step-by-Step Guide -> https://www.mechanicwiki.com/2026/04/how-to-program-gm-bcm-with-launch-x431.html
+  (3) GM BCM Programming & Clone Guide 2003–2024 | Karmanauto -> https://karmanauto.com/gm-bcm-programming-cloning-complete-guide-2003-2024/
+[Digesting] Synthesizing search results into permanent knowledge ...
+[Index Ready] Indexed 5 files into 16 fast-search chunks (/home/kenny/AI-Checkmate/knowledge_index.db)
+[Learned & Indexed!] Saved to: /home/kenny/AI-Checkmate/knowledge/20261126_1806_ddg_GM_Global_A_BCM_24C16_95320_PIN_extraction_an.md
+
+
+[5/8] Researching & Indexing: GM 6L80 T43 TCM bench pinout and GM DPS calibration flashing steps
+[DuckDuckGo] Searching: GM 6L80 T43 TCM bench pinout and GM DPS calibration flashing steps ...
+  [Warning] Skipped due to error: No results found.
+
+[6/8] Researching & Indexing: Ford F150 BCM 95320 EEPROM VIN location and FORScan PATS parameter reset
+[DuckDuckGo] Searching: Ford F150 BCM 95320 EEPROM VIN location and FORScan PATS parameter reset ...
+  (1) Ford F150 BCM Replacement FORScan Programming Steps (PATS Reset)BCM programming procedure | F150gen14 -- 2021+ Ford F-150 ...How to Reprogram BCM on Ford F150 - FacebookFord PATS Relearn Procedure - Module ExpertsPARAMETER RESET - FORScan forumPATS keyfob programming for 2020+ now available? - FORScan forumPresentation - OEMDTC -> https://www.youtube.com/watch?v=UE5A26t8mcs
+  (2) BCM programming procedure | F150gen14 -- 2021+ Ford F-150 ... -> https://www.f150gen14.com/forum/threads/bcm-programming-procedure.23882/
+  (3) How to Reprogram BCM on Ford F150 - Facebook -> https://www.facebook.com/fb-answers/how-to-reprogram-bcm-on-ford-f150/
+[Digesting] Synthesizing search results into permanent knowledge ...
+[Index Ready] Indexed 6 files into 19 fast-search chunks (/home/kenny/AI-Checkmate/knowledge_index.db)
+[Learned & Indexed!] Saved to: /home/kenny/AI-Checkmate/knowledge/20261126_1809_ddg_Ford_F150_BCM_95320_EEPROM_VIN_location_and_F.md
+
+
+[7/8] Researching & Indexing: Chrysler Dodge Ram GPEC2 PCM 95320 EEPROM SKIM PIN and VIN transfer procedure
+[DuckDuckGo] Searching: Chrysler Dodge Ram GPEC2 PCM 95320 EEPROM SKIM PIN and VIN transfer procedure ...
+  [Warning] Skipped due to error: No results found.
+
+[8/8] Researching & Indexing: Micsig oscilloscope BMW N52 BSD alternator water pump oil sensor fault isolation
+[DuckDuckGo] Searching: Micsig oscilloscope BMW N52 BSD alternator water pump oil sensor fault isolation ...
+  [Warning] Skipped due to error: No results found.
+
+[Rebuilding Fast SQLite FTS5 Search Index] ...
+[Index Ready] Indexed 6 files into 19 fast-search chunks (/home/kenny/AI-Checkmate/knowledge_index.db)
+[Pushing Overnight Research to GitHub] ...
+[main 86fe4ca] Add overnight researched automotive diagnostic guides
+ 2 files changed, 72 insertions(+)
+ create mode 100644 knowledge/20261126_1806_ddg_GM_Global_A_BCM_24C16_95320_PIN_extraction_an.md
+ create mode 100644 knowledge/20261126_1809_ddg_Ford_F150_BCM_95320_EEPROM_VIN_location_and_F.md
+To https://github.com/therealunforgiven/AI-Checkmate.git
+   f23ae5c..86fe4ca  main -> main
+
+=== OVERNIGHT RUN COMPLETE! ALL GUIDES INDEXED & SYNCED ===
